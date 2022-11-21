@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "516487384617",
+    "project_id": "streamchat-83091",
+    "storage_bucket": "streamchat-83091.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516487384617:android:76fd09ab20f132b1e19638",
+        "android_client_info": {
+          "package_name": "com.example.streamchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516487384617-4r88c82og1u6h7q7uj9lgg50431954md.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Ujy1xjIke3FQ4txm9zWZSXDP_-bO0DM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516487384617-4r88c82og1u6h7q7uj9lgg50431954md.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516487384617:android:564f5693bd790f69e19638",
+        "android_client_info": {
+          "package_name": "com.example.streamchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516487384617-4r88c82og1u6h7q7uj9lgg50431954md.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Ujy1xjIke3FQ4txm9zWZSXDP_-bO0DM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516487384617-4r88c82og1u6h7q7uj9lgg50431954md.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

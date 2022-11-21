@@ -1,0 +1,33 @@
+name: streamchat
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.4 <3.0.0'
+
+dependencies:
+  cloud_firestore: ^4.1.0
+  cupertino_icons: ^1.0.2
+  equatable: ^2.0.5
+  firebase_core: ^2.3.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.1
+  jiffy: ^5.0.0
+  photo_manager: ^2.5.0
+  shimmer: ^2.0.0
+  stream_chat_flutter: ^5.1.0
+  stream_chat_flutter_core: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/
