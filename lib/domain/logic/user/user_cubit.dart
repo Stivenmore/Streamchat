@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:streamchat/data/contracts/contract.dart';
-import 'package:streamchat/domain/models/contactsmodel.dart';
 import 'package:streamchat/domain/models/usermodel.dart';
 
 part 'user_state.dart';
@@ -19,6 +18,17 @@ class UserCubit extends Cubit<UserState> {
       emit(state.copyWith(user: resp, enumuser: StateUser.success));
     } catch (e) {
       emit(state.copyWith(enumuser: StateUser.error));
+    }
+  }
+
+
+    Future contacts() async{
+    try {
+      emit(state.copyWith(enumlistuser: StateListUsers.loading));
+      final resp = await _dataSource.contacts();
+      emit(state.copyWith(listuser: resp, enumlistuser: StateListUsers.success));
+    } catch (e) {
+      emit(state.copyWith(enumlistuser: StateListUsers.error));
     }
   }
 }

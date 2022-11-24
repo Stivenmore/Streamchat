@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:streamchat/domain/logic/stream/stream_cubit.dart';
-import 'package:streamchat/screens/Contactos/Components/messagecontainer.dart';
-import 'package:streamchat/screens/Contactos/Components/time.dart';
+import 'package:streamchat/screens/Chats/Components/messagecontainer.dart';
+import 'package:streamchat/screens/Chats/Components/time.dart';
 
 class ListMessage extends StatefulWidget {
   const ListMessage({

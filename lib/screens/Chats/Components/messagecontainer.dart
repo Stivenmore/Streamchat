@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:streamchat/screens/Contactos/Components/view_image.dart';
-import 'package:streamchat/screens/Contactos/Components/view_video.dart';
+import 'package:streamchat/screens/Chats/Components/view_image.dart';
+import 'package:streamchat/screens/Chats/Components/view_video.dart';
 
 class MessageContainer extends StatelessWidget {
   const MessageContainer(

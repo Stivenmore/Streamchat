@@ -3,7 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
-import 'package:streamchat/screens/Contactos/Components/actionbutton.dart';
+import 'package:streamchat/screens/Chats/Components/actionbutton.dart';
 
 class InputChat extends StatefulWidget {
   const InputChat({Key? key}) : super(key: key);

@@ -11,8 +11,19 @@ class UserDataSource implements ContractUserDataSource{
   @override
   Future<UserModel> user() async{
        try {
-     final resp = await _firestore.collection("Users").doc('XR5t0NEIa61Qh6FUlpIx').get();
+     final resp = await _firestore.collection("Admin").doc('SXECbstqaD8AkQufIIxd').get();
       UserModel list = UserModel.fromFirebase(resp.data()!);
+      return list;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  
+  @override
+  Future<List<UserModel>> contacts() async{
+    try {
+     final resp = await _firestore.collection("Users").get();
+      List<UserModel> list = (resp.docs).map((e) => UserModel.fromFirebase(e.data())).toList();
       return list;
     } catch (e) {
       throw Exception(e);

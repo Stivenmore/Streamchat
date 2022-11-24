@@ -15,12 +15,17 @@ void main() async {
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final datasource = UserDataSource();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider(
-      create: (context) => StreamCubit(),
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => StreamCubit(),
+        ),
+        BlocProvider(create: ((context) => UserCubit(datasource)))
+      ],
+      child: const MyApp(),
     ),
-    BlocProvider(create: ((context) => UserCubit(datasource)))
-  ], child: const MyApp()));
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -35,7 +40,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final streamClient = StreamChatClient(apiKey, logLevel: Level.INFO);
     return MaterialApp(
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       title: 'Stream Chat',
       builder: (context, child) {

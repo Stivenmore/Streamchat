@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:streamchat/domain/logic/stream/stream_cubit.dart';
 import 'package:streamchat/domain/logic/user/user_cubit.dart';
 import 'package:streamchat/domain/models/contactsmodel.dart';
-import 'package:streamchat/screens/Contactos/Components/chat.dart';
-import 'package:streamchat/screens/Contactos/Components/lastmessage.dart';
-import 'package:streamchat/screens/Contactos/Components/lastmessageat.dart';
+import 'package:streamchat/domain/models/usermodel.dart';
+import 'package:streamchat/screens/Chats/Components/chat.dart';
+import 'package:streamchat/screens/Chats/Components/lastmessage.dart';
+import 'package:streamchat/screens/Chats/Components/lastmessageat.dart';
 import 'package:streamchat/screens/Global/global_functions.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -19,18 +21,25 @@ class _ContactsScreenState extends State<ContactsScreen> {
   late final StreamChannelListController contactschannelsController;
   @override
   void initState() {
+    connectUserClient();
     setupcontroller();
     contactschannelsController.doInitialLoad();
     super.initState();
   }
 
+  void connectUserClient()async{
+    final client = StreamChatCore.of(context).client;
+    final user = context.read<UserCubit>().state.user;
+    await client.connectUser(User(id: user.id), client.devToken(user.id.trim()).rawValue);
+  }
+
   void setupcontroller() {
     contactschannelsController = StreamChannelListController(
-      client: StreamChatCore.of(context).client,
+      client: context.read<StreamCubit>().state.client,
       filter: Filter.and(
         [
           Filter.equal('type', 'messaging'),
-          Filter.in_('members', [StreamChatCore.of(context).currentUser!.id])
+          Filter.in_('members', [context.read<StreamCubit>().state.client.state.currentUser!.id.trim()])
         ],
       ),
     );
@@ -39,8 +48,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final list = context.select<UserCubit, List<ContactsModel>>(
-        (value) => value.state.user.contacts);
+    final list = context.select<UserCubit, List<UserModel>>(
+        (value) => value.state.listuser);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(

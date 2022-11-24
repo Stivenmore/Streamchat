@@ -1,14 +1,14 @@
-  import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
-import 'package:streamchat/domain/models/contactsmodel.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+import 'package:streamchat/domain/models/usermodel.dart';
 
-namechannelTocontact(Channel channel, List<ContactsModel> contacts) {
-    final value =
-        contacts.where((element) => element.nameChannel == channel.name).first;
-    return value.nameUser;
-  }
+namechannelTocontact(Channel channel, List<UserModel> contacts) {
+  final value =
+      contacts.where((element) => channel.name!.contains(element.name)).first;
+  return value.name;
+}
 
-  imgchannelTocontact(Channel channel, List<ContactsModel> contacts) {
-    final value =
-        contacts.where((element) => element.nameChannel == channel.name);
-    return value.first.img;
-  }
+imgchannelTocontact(Channel channel, List<UserModel> contacts) {
+  final value =
+      contacts.where((element) => channel.name!.contains(element.name));
+  return value.first.img;
+}

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:streamchat/screens/Contactos/Components/inputchat.dart';
-import 'package:streamchat/screens/Contactos/Components/listmessage.dart';
+import 'package:streamchat/screens/Chats/Components/inputchat.dart';
+import 'package:streamchat/screens/Chats/Components/listmessage.dart';
 
 class ChatScreen extends StatefulWidget {
   final String img, name;

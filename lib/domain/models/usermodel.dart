@@ -17,8 +17,8 @@ class UserModel {
         name: map["name"] as String? ?? "",
         img: map["img"] as String? ?? "",
         id: map["id"] as String? ?? "",
-        contacts: (map["contacts"] as Iterable)
+        contacts: map["contacts"] != null? (map["contacts"] as Iterable)
             .map((e) => ContactsModel.fromFirebase(e))
-            .toList());
+            .toList(): <ContactsModel>[] );
   }
 }
