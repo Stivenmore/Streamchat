@@ -35,7 +35,11 @@ Widget typeMessage(Message message) {
       placeholder: 'assets/placeholder.jpg',
       image: message.attachments.first.imageUrl!,
     );
-  } else {
+  } else if (message.attachments.isNotEmpty && message.attachments.last.type == 'video'){
+    return Icon(Icons.movie, size: 20,);
+  }else if (message.attachments.isNotEmpty && message.attachments.last.type == 'PDF'){
+    return Icon(Icons.file_copy, size: 20,);
+  }else {
     return Text(
       '...',
       style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),

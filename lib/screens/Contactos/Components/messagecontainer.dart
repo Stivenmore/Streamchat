@@ -67,6 +67,7 @@ class MessageContainer extends StatelessWidget {
                       builder: ((context) => ViewImage(
                           url: message.attachments.first.imageUrl!)))),
                   child: FadeInImage.assetNetwork(
+                    height: 200,
                     placeholderScale: 100,
                     placeholder: 'assets/placeholder.jpg',
                     image: message.attachments.first.imageUrl!,
@@ -82,6 +83,7 @@ class MessageContainer extends StatelessWidget {
                           Opacity(
                             opacity: 0.5,
                             child: FadeInImage.assetNetwork(
+                              height: 200,
                               placeholderScale: 100,
                               placeholder: 'assets/placeholder.jpg',
                               image: message.attachments.first.assetUrl!,
@@ -95,11 +97,16 @@ class MessageContainer extends StatelessWidget {
                         ],
                       ),
                     )
-                  : Icon(
-                      Icons.file_copy,
-                      color: colortext,
-                      size: 55,
-                    ),
+                  : message.attachments.first.type == 'PDF'
+                      ? Icon(
+                          Icons.file_copy,
+                          size: 44,
+                        )
+                      : Icon(
+                          Icons.file_copy,
+                          color: colortext,
+                          size: 55,
+                        ),
           const SizedBox(
             height: 5,
           ),
@@ -119,10 +126,14 @@ class MessageContainer extends StatelessWidget {
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
             builder: ((context) =>
                 ViewImage(url: message.attachments.first.imageUrl!)))),
-        child: FadeInImage.assetNetwork(
-          placeholderScale: 100,
-          placeholder: 'assets/placeholder.jpg',
-          image: message.attachments.first.imageUrl!,
+        child: SizedBox(
+          height: 200,
+          child: FadeInImage.assetNetwork(
+            placeholderScale: 100,
+            placeholder: 'assets/placeholder.jpg',
+            image: message.attachments.first.imageUrl!,
+            fit: BoxFit.fitHeight,
+          ),
         ),
       );
     } else if (message.attachments.isNotEmpty &&
@@ -133,7 +144,6 @@ class MessageContainer extends StatelessWidget {
                 ViewVideo(url: message.attachments.first.imageUrl!)))),
         child: SizedBox(
           height: 200,
-          width: 200,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -156,11 +166,19 @@ class MessageContainer extends StatelessWidget {
       );
     } else if (message.text != null && message.text!.isNotEmpty) {
       return SizedBox(
-        width: 150,
         child: Text(
           message.text!,
           style: TextStyle(color: colortext, fontWeight: FontWeight.w600),
           overflow: TextOverflow.ellipsis,
+        ),
+      );
+    } else if (message.attachments.first.type == 'PDF') {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.file_copy,
+          color: colortext,
+          size: 44,
         ),
       );
     } else {

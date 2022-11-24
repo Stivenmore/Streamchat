@@ -79,6 +79,32 @@ class InputChatState extends State<InputChat> {
     }
   }
 
+  void sendPDF() async {
+    Navigator.of(context).pop();
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['PDF', 'pdf'],
+        allowMultiple: true);
+    if (result != null && result.files.isNotEmpty) {
+      for (var i = 0; i < result.files.length; i++) {
+        final file = AttachmentFile(
+            size: result.files[i].size,
+            path: result.files[i].path,
+            bytes: result.files[i].bytes,
+            name: result.files[i].name);
+        await StreamChannel.of(context).channel.sendFile(file,
+            extraData: {"name": result.files[i].name}).then((value) {
+          final attachment = Attachment(
+              type: 'PDF', imageUrl: value.file, thumbUrl: value.thumbUrl);
+          sendMessage(
+              Message(attachments: [attachment], text: controller.text.trim()));
+        });
+      }
+      controller.clear();
+      FocusScope.of(context).unfocus();
+    }
+  }
+
   showModel() {
     return showModalBottomSheet(
         context: context,
@@ -148,6 +174,7 @@ class InputChatState extends State<InputChat> {
                         width: 15,
                       ),
                       InkWell(
+                        onTap: () => sendPDF(),
                         child: Column(
                           children: [
                             Icon(
