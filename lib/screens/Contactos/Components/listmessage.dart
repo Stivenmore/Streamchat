@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:streamchat/domain/logic/stream/stream_cubit.dart';
-import 'package:streamchat/screens/Contactos/Components/messageme.dart';
-import 'package:streamchat/screens/Contactos/Components/messageother.dart';
+import 'package:streamchat/screens/Contactos/Components/messagecontainer.dart';
 import 'package:streamchat/screens/Contactos/Components/time.dart';
 
 class ListMessage extends StatefulWidget {
@@ -31,9 +30,7 @@ class _ListMessageState extends State<ListMessage> {
           if (index == widget.messages.length - 1) {
             return TimeApp(dateTime: widget.messages[index].createdAt);
           }
-          if (widget.messages.length == 1) {
-            return const SizedBox.shrink();
-          } else if (index >= widget.messages.length - 1) {
+          if (widget.messages.length == 1 || index >= widget.messages.length - 1) {
             return const SizedBox.shrink();
           } else if (index <= widget.messages.length) {
             final message = widget.messages[index];
@@ -52,11 +49,38 @@ class _ListMessageState extends State<ListMessage> {
         },
         itemBuilder: (context, index) {
           if (index < widget.messages.length) {
+            const _borderRadius = 26.0;
             final message = widget.messages[index];
             if (message.user?.id == user?.id) {
-              return MessageMe(message: message);
+              return MessageContainer(
+                message: message,
+                alignment: Alignment.centerRight,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                boxDecoration: BoxDecoration(
+                  color: Color(0xffFB7F6B),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(_borderRadius),
+                    bottomLeft: Radius.circular(_borderRadius),
+                    bottomRight: Radius.circular(_borderRadius),
+                  ),
+                ),
+                colortext: Colors.white,
+              );
             } else {
-              return MessageOther(message: message);
+              return MessageContainer(
+                message: message,
+                alignment: Alignment.centerLeft,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                boxDecoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(_borderRadius),
+                    topRight: Radius.circular(_borderRadius),
+                    bottomRight: Radius.circular(_borderRadius),
+                  ),
+                ),
+                colortext: Colors.black,
+              );
             }
           } else {
             return const SizedBox.shrink();
