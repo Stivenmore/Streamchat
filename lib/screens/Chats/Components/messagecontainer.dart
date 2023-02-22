@@ -7,6 +7,8 @@ class MessageContainer extends StatelessWidget {
   const MessageContainer(
       {Key? key,
       required this.message,
+      required this.isGroup,
+      required this.itsme,
       required this.alignment,
       required this.boxDecoration,
       required this.colortext,
@@ -18,6 +20,8 @@ class MessageContainer extends StatelessWidget {
   final Alignment alignment;
   final CrossAxisAlignment crossAxisAlignment;
   final Color colortext;
+  final bool isGroup;
+  final bool itsme;
 
   @override
   Widget build(BuildContext context) {
@@ -166,10 +170,17 @@ class MessageContainer extends StatelessWidget {
       );
     } else if (message.text != null && message.text!.isNotEmpty) {
       return SizedBox(
-        child: Text(
-          message.text!,
-          style: TextStyle(color: colortext, fontWeight: FontWeight.w600),
-          overflow: TextOverflow.ellipsis,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            !itsme && isGroup? 
+                Text(message.user!.name,) : SizedBox(),
+            Text(
+              message.text!,
+              style: TextStyle(color: colortext, fontWeight: FontWeight.w600),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
       );
     } else if (message.attachments.first.type == 'PDF') {

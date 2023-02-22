@@ -18,38 +18,15 @@ class ContactsScreen extends StatefulWidget {
 }
 
 class _ContactsScreenState extends State<ContactsScreen> {
-  late final StreamChannelListController contactschannelsController;
-  @override
-  void initState() {
-    connectUserClient();
-    setupcontroller();
-    contactschannelsController.doInitialLoad();
-    super.initState();
-  }
-
-  void connectUserClient()async{
-    final client = StreamChatCore.of(context).client;
-    final user = context.read<UserCubit>().state.user;
-    await client.connectUser(User(id: user.id), client.devToken(user.id.trim()).rawValue);
-  }
-
-  void setupcontroller() {
-    contactschannelsController = StreamChannelListController(
-      client: context.read<StreamCubit>().state.client,
-      filter: Filter.and(
-        [
-          Filter.equal('type', 'messaging'),
-          Filter.in_('members', [context.read<StreamCubit>().state.client.state.currentUser!.id.trim()])
-        ],
-      ),
-    );
-  }
+  late StreamChannelListController contactschannelsController;
 
   @override
   Widget build(BuildContext context) {
+    contactschannelsController =
+        context.watch<StreamCubit>().contactschannelsController;
     Size size = MediaQuery.of(context).size;
-    final list = context.select<UserCubit, List<UserModel>>(
-        (value) => value.state.listuser);
+    final list = context
+        .select<UserCubit, List<UserModel>>((value) => value.state.listuser);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -82,8 +59,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                   child: ChatScreen(
                                     name: namechannelTocontact(
                                         channel[index], list),
-                                    img: imgchannelTocontact(
-                                        channel[index], list),
+                                    img:
+                                        'https://placeholder.com/assets/images/150x150-2-500x500.png',
                                   ),
                                 );
                               }))),
@@ -105,8 +82,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                             child: FadeInImage.assetNetwork(
                                               placeholder:
                                                   'assets/placeholder.jpg',
-                                              image: imgchannelTocontact(
-                                                  channel[index], list),
+                                              image:
+                                                  'https://placeholder.com/assets/images/150x150-2-500x500.png',
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -125,7 +102,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                               children: [
                                                 Text(
                                                   namechannelTocontact(
-                                                      channel[index], list),
+                                                      channel[index], [
+                                                    UserModel(
+                                                        name: 'Yndira',
+                                                        img: '',
+                                                        id: 'Yndira_be638e78-1e3e-4fcb-a197-777d4cc40916',
+                                                        contacts: [])
+                                                  ]),
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,

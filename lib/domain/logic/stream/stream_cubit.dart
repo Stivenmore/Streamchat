@@ -2,74 +2,63 @@ import 'package:equatable/equatable.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:streamchat/data/contracts/contract.dart';
 import 'package:streamchat/domain/models/usermodel.dart';
 
 part 'stream_state.dart';
 
 class StreamCubit extends Cubit<StreamState> {
-  StreamCubit() : super(StreamState());
+  final ContractUserDataSource _dataSource;
+  StreamCubit(ContractUserDataSource dataSource)
+      : _dataSource = dataSource,
+        super(StreamState());
 
-  Future initClient(StreamChatClient client, UserModel model,
-      List<UserModel> contacts) async {
+  late StreamChannelListController contactschannelsController;
+  Future createController(StreamChatClient client, String idUser) async {
+    contactschannelsController = StreamChannelListController(
+      client: client,
+      filter: Filter.and(
+        [
+          Filter.equal('type', 'messaging'),
+          Filter.in_('members', [idUser.trim()])
+        ],
+      ),
+    );
+    contactschannelsController.doInitialLoad();
+  }
+
+  void initProcess(){
+   emit(state.copyWith(stateStep: StateClientStep.first));
+  }
+
+  Future initClient(StreamChatClient client, UserModel model) async {
     try {
-      emit(state.copyWith(stateClient: StateClient.loading));
+      emit(state.copyWith(stateStep: StateClientStep.first));
       final current = client.state.currentUser;
-      if (current?.id != model.id) {
-        await client.connectUser(
-            User(
-                id: model.id.trim(),
-                extraData: {"image": model.img, "name": model.name}),
-            client.devToken(model.id).rawValue);
-        await createListChannels(client, contacts, model);
-      }
-      emit(state.copyWith(client: client, stateClient: StateClient.success));
+      await _dataSource.connectUserSingle(model, client);
+      emit(state.copyWith(client: client, stateStep: StateClientStep.tercer));
     } catch (e) {
-      emit(state.copyWith(stateClient: StateClient.error));
+      emit(state.copyWith(stateStep: StateClientStep.zero));
     }
   }
 
   Future createListChannels(StreamChatClient client, List<UserModel> contacts,
       UserModel currentUser) async {
-    emit(state.copyWith(stateUploadContacts: StateUploadContacts.loading));
     try {
-      await client.disconnectUser();
-      await createUsers(contacts, client);
-      await client.disconnectUser();
-      await client.connectUser(
+      emit(state.copyWith(client: client, stateStep: StateClientStep.second));
+      await _dataSource.createUsers(contacts, client);
+      await _dataSource.connectUserForClient(
           User(
             id: 'dualbp',
           ),
-          client.devToken('dualbp').rawValue);
-      for (var i = 0; i < contacts.length; i++) {
-        await client.createChannel('messaging',
-            channelId: '${contacts[i].name}And${currentUser.name}',
-            channelData: {
-              "members": [contacts[i].id.trim(), currentUser.id.trim()],
-              "name": "${contacts[i].name}And${currentUser.name}"
-            });
-      }
-      await client.disconnectUser();
-      await client.connectUser(
-          User(
-              id: currentUser.id.trim(),
-              extraData: {"image": currentUser.img, "name": currentUser.name}),
-          client.devToken(currentUser.id).rawValue);
-      emit(state.copyWith(stateUploadContacts: StateUploadContacts.success));
+          client.devToken('dualbp').rawValue,
+          client);
+      await _dataSource.createChannel(contacts, client, currentUser);
+      await _dataSource.disconnectUser(client);
+      await _dataSource.connectUserSingle(currentUser, client);
+      emit(state.copyWith(stateStep: StateClientStep.tercer));
     } catch (e) {
-      emit(state.copyWith(stateUploadContacts: StateUploadContacts.error));
-    }
-  }
-
-  Future createUsers(List<UserModel> contacts, StreamChatClient client) async {
-    for (int i = 0; i < contacts.length; i++) {
-      await client.disconnectUser();
-      await client.connectUser(
-          User(id: contacts[i].id.trim(), extraData: {
-            "image": contacts[i].img,
-            "name": contacts[i].name,
-            "role": "admin"
-          }),
-          client.devToken(contacts[i].id.trim()).rawValue);
+      emit(state.copyWith(stateStep: StateClientStep.second));
     }
   }
 }

@@ -1,33 +1,26 @@
 part of 'stream_cubit.dart';
 
-enum StateClient { loading, success, error, none }
-enum StateContacts { loading, success, error, none }
-enum StateUploadContacts {loading, success, error, none}
+enum StateClientStep {zero ,first, second, tercer}
 
 class StreamState extends Equatable {
   late final StreamChatClient client;
-  late final StateClient stateClient;
-  late final StateUploadContacts stateUploadContacts;
+  late final StateClientStep stateStep;
 
   StreamState(
       {StreamChatClient? client,
-      StateClient? stateClient,
-      StateUploadContacts? stateUploadContacts}) {
+      StateClientStep? stateStep}) {
     this.client = client ?? StreamChatClient('');
-    this.stateClient = stateClient ?? StateClient.none;
-    this.stateUploadContacts = stateUploadContacts ?? StateUploadContacts.none;
+    this.stateStep = stateStep ?? StateClientStep.zero;
   }
 
   StreamState copyWith(
       {StreamChatClient? client,
-      StateClient? stateClient,
-      StateUploadContacts? stateUploadContacts}) {
+      StateClientStep? stateStep}) {
     return StreamState(
         client: client ?? this.client,
-        stateClient: stateClient ?? this.stateClient,
-        stateUploadContacts: stateUploadContacts ?? this.stateUploadContacts);
+        stateStep: stateStep ?? this.stateStep);
   }
 
   @override
-  List<Object> get props => [client, stateClient, stateUploadContacts];
+  List<Object?> get props => [client, stateStep];
 }

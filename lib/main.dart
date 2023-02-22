@@ -19,7 +19,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => StreamCubit(),
+          create: (context) => StreamCubit(datasource),
         ),
         BlocProvider(create: ((context) => UserCubit(datasource)))
       ],

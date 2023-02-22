@@ -6,16 +6,16 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:streamchat/screens/Chats/Components/inputchat.dart';
 import 'package:streamchat/screens/Chats/Components/listmessage.dart';
 
-class ChatScreen extends StatefulWidget {
+class GroupScreen extends StatefulWidget {
   final String img, name;
-  ChatScreen({Key? key, required this.img, required this.name})
+  GroupScreen({Key? key, required this.img, required this.name})
       : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<GroupScreen> createState() => _GroupScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _GroupScreenState extends State<GroupScreen> {
   late StreamSubscription<int> unreadCountSubscription;
 
   @override
@@ -90,7 +90,6 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Column(
           children: [
-            
             Expanded(
               child: MessageListCore(
                 loadingBuilder: (context) {
@@ -99,7 +98,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 emptyBuilder: (context) => const SizedBox.shrink(),
                 errorBuilder: (context, error) => Text(error.toString()),
                 messageListBuilder: (context, messages) =>
-                    ListMessage(messages: messages, isGroup: false,),
+                    ListMessage(messages: messages, isGroup: true,),
               ),
             ),
             const InputChat(),

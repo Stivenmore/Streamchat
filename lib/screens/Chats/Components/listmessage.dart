@@ -9,9 +9,11 @@ class ListMessage extends StatefulWidget {
   const ListMessage({
     Key? key,
     required this.messages,
+    required this.isGroup,
   }) : super(key: key);
 
   final List<Message> messages;
+  final bool isGroup;
 
   @override
   State<ListMessage> createState() => _ListMessageState();
@@ -53,6 +55,8 @@ class _ListMessageState extends State<ListMessage> {
             final message = widget.messages[index];
             if (message.user?.id == user?.id) {
               return MessageContainer(
+                itsme: true,
+                isGroup: widget.isGroup,
                 message: message,
                 alignment: Alignment.centerRight,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -68,6 +72,8 @@ class _ListMessageState extends State<ListMessage> {
               );
             } else {
               return MessageContainer(
+                itsme: false,
+                isGroup: widget.isGroup,
                 message: message,
                 alignment: Alignment.centerLeft,
                 crossAxisAlignment: CrossAxisAlignment.end,

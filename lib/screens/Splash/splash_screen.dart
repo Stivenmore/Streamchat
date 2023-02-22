@@ -16,66 +16,59 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      context.read<UserCubit>().getuser();
-      context.read<UserCubit>().contacts();
+      context.read<UserCubit>().getuser().whenComplete(() {
+        context.read<StreamCubit>().initProcess();
+      });
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    
     return Scaffold(
       backgroundColor: Colors.black,
       body: SizedBox(
         height: size.height,
         width: size.width,
         child: Center(
-          child: Builder(builder: (context) {
-            final userState = context.select((UserCubit bloc) => bloc.state);
-            final user = context.select((UserCubit value) => value.state.user);
-            final contacts =
-                context.select((UserCubit value) => value.state.listuser);
-            if (userState.enumuser == StateUser.success &&
-                userState.enumlistuser == StateListUsers.success) {
-              final streamClient = StreamChatCore.of(context).client;
-              streamClient.disconnectUser().whenComplete(() {
-                context
-                    .read<StreamCubit>()
-                    .initClient(streamClient, user, contacts);
-              });
-              final streamState =
-                  context.select((StreamCubit bloc) => bloc.state.stateClient);
-              if (streamState == StateClient.success) {
-                final statecontact = context.select(
-                    (StreamCubit bloc) => bloc.state.stateUploadContacts);
-                if (statecontact == StateUploadContacts.success) {
-                  Future.delayed(Duration.zero, () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ContactsScreen()),
-                        (route) => false);
-                  });
-                }
-              }
+            child: BlocListener<StreamCubit, StreamState>(
+          listenWhen: (previous, current) =>
+              previous.stateStep != current.stateStep,
+          listener: (context, state) {
+            final streamClient = StreamChatCore.of(context).client;
+            if (state.stateStep == StateClientStep.first) {
+              UserState userState = context.read<UserCubit>().state;
+              context
+                  .read<StreamCubit>()
+                  .initClient(streamClient, userState.user);
             }
-            return TweenAnimationBuilder(
-                tween: Tween<double>(begin: 0.0, end: 60.0),
-                duration: const Duration(seconds: 100),
-                builder: (context, double value, child) {
-                  return Transform.rotate(
-                    angle: value,
-                    child: const Icon(
-                      Icons.star,
-                      color: Colors.white,
-                      size: 50,
-                    ),
-                  );
-                });
-          }),
-        ),
+            if (state.stateStep == StateClientStep.tercer) {
+              UserState userState = context.read<UserCubit>().state;
+              context
+                  .read<StreamCubit>()
+                  .createController(streamClient, userState.user.id.trim());
+              Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => ContactsScreen()),
+                    (route) => false);
+            }
+          },
+          child: TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0.0, end: 60.0),
+              duration: const Duration(seconds: 100),
+              builder: (context, double value, child) {
+                return Transform.rotate(
+                  angle: value,
+                  child: const Icon(
+                    Icons.star,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                );
+              }),
+        )),
       ),
     );
   }

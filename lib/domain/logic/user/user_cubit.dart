@@ -11,22 +11,27 @@ class UserCubit extends Cubit<UserState> {
       : _dataSource = dataSource,
         super(UserState());
 
-  Future getuser()async{
+  Future getuser() async {
     try {
       emit(state.copyWith(enumuser: StateUser.loading));
-      final resp = await _dataSource.user();
+      final resp = UserModel(
+          name: 'Stiven',
+          img: '',
+          id: 'Stiven_f04cba71-99c8-49ea-9b70-b233514cc0ef',
+          contacts: []);
       emit(state.copyWith(user: resp, enumuser: StateUser.success));
     } catch (e) {
       emit(state.copyWith(enumuser: StateUser.error));
     }
   }
+  
 
-
-    Future contacts() async{
+  Future contacts() async {
     try {
       emit(state.copyWith(enumlistuser: StateListUsers.loading));
-      final resp = await _dataSource.contacts();
-      emit(state.copyWith(listuser: resp, enumlistuser: StateListUsers.success));
+      final resp =  <UserModel>[];
+      emit(
+          state.copyWith(listuser: resp, enumlistuser: StateListUsers.success));
     } catch (e) {
       emit(state.copyWith(enumlistuser: StateListUsers.error));
     }
